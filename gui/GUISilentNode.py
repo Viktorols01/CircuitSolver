@@ -1,9 +1,11 @@
-from classes.gui.Help import interpolate
-from classes.gui.sub.GUISocket import GUISocket
-from classes.gui.abstract.GUIDraggable import GUIDraggable
-from classes.solver.components.Source import Source
+from gui.Utility import interpolate
+from gui.sub.GUISocket import GUISocket
+from gui.abstract.GUIDraggable import GUIDraggable
+from circuit.components.Source import Source
 
-
+# When two nodes are connected, there needs to be a component between them.
+# This is it.
+# TODO: Remove this and make only one of the connected nodes add a shared variable.
 class GUISilentNode(GUIDraggable):
     def __init__(self, socket_in_outer, socket_out_outer):
         self.math_component = Source(0)

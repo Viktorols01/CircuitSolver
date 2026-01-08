@@ -1,4 +1,4 @@
-from classes.gui.abstract.GUISocketElement import GUISocketElement
+from gui.abstract.GUISocketElement import GUISocketElement
 
 # alltid rektangulära, men sockets kan vara på olika positioner
 

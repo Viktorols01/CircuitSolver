@@ -1,6 +1,6 @@
-from classes.gui.abstract.GUIDraggable import GUIDraggable
-from classes.gui.sub.GUISocket import GUISocket
-from classes.solver.components.Source import Source
+from gui.abstract.GUIDraggable import GUIDraggable
+from gui.sub.GUISocket import GUISocket
+from circuit.components.Source import Source
 
 
 class GUISource(GUIDraggable):

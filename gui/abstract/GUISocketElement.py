@@ -1,4 +1,4 @@
-from classes.gui.Help import interpolate
+from gui.Utility import interpolate
 
 
 class GUISocketElement:

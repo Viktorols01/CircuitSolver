@@ -1,9 +1,9 @@
-from classes.solver.nodes.Node import Node
-from classes.solver.SolverNetwork import SolverNetwork
+from circuit.nodes.Node import Node
+from circuit.SolverNetwork import SolverNetwork
 
-from classes.solver.components.Resistance import Resistance
-from classes.solver.components.Source import Source
-from classes.solver.components.Diode import Diode
+from circuit.components.Resistance import Resistance
+from circuit.components.Source import Source
+from circuit.components.Diode import Diode
 
 # Create nodes
 node1 = Node()

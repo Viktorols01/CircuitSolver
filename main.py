@@ -1,12 +1,12 @@
-from classes.gui.GUINode import GUINode
-from classes.gui.GUIResistance import GUIResistance
-from classes.gui.GUISource import GUISource
-from classes.gui.GUISilentNode import GUISilentNode
-from classes.gui.Window import Window
-from classes.solver.SolverNetwork import SolverNetwork
-from classes.solver.components.Resistance import Resistance
-from classes.solver.components.Source import Source
-from classes.solver.nodes.Node import Node
+from gui.GUINode import GUINode
+from gui.GUIResistance import GUIResistance
+from gui.GUISource import GUISource
+from gui.GUISilentNode import GUISilentNode
+from gui.Window import Window
+from circuit.CircuitSolver import CircuitSolver
+from circuit.components.Resistance import Resistance
+from circuit.components.Source import Source
+from circuit.nodes.Node import Node
 
 
 def solve(window):
@@ -36,7 +36,7 @@ def solve(window):
             components.append(draggable.math_component)
 
     # Add to network
-    network = SolverNetwork()
+    network = CircuitSolver()
     for node in nodes:
         network.add_node(node)
     for component in components:

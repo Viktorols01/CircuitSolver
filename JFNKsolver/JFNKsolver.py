@@ -30,7 +30,6 @@ class JFNKsolver:
                 for name, value in iterate.get_value_map_from_vector().items():
                     print("\t", name, value)
                 print("Previous variable increment", du)
-                input("...")
 
             du = self.__gmresIteration(iterate, verbose=verbose)
             iterate.add_vector(du)

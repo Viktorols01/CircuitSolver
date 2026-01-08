@@ -3,7 +3,7 @@ from JFNKsolver.interface.Equation import Equation
 from JFNKsolver.JFNKsolver import JFNKsolver
 
 
-class SolverNetwork:
+class CircuitSolver:
     def __init__(self, use_complex=False):
         self.use_complex = use_complex
 

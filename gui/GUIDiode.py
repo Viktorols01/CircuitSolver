@@ -1,7 +1,7 @@
-from classes.gui.abstract.GUIDraggable import GUIDraggable
-from classes.gui.sub.GUISocket import GUISocket
-from classes.solver.components.Diode import Diode
-from classes.solver.components.Resistance import Resistance
+from gui.abstract.GUIDraggable import GUIDraggable
+from gui.sub.GUISocket import GUISocket
+from circuit.components.Diode import Diode
+from circuit.components.Resistance import Resistance
 
 
 class GUIDiode(GUIDraggable):

@@ -1,16 +1,16 @@
 import tkinter as tk
 
-from classes.gui.GUIDiode import GUIDiode
-from classes.gui.GUINode import GUINode
-from classes.gui.GUIResistance import GUIResistance
-from classes.gui.GUISilentNode import GUISilentNode
-from classes.gui.GUISource import GUISource
+from gui.GUIDiode import GUIDiode
+from gui.GUINode import GUINode
+from gui.GUIResistance import GUIResistance
+from gui.GUISilentNode import GUISilentNode
+from gui.GUISource import GUISource
 
 
 class Window:
     def __init__(self, width, height, solve):
         self.root = tk.Tk()
-        self.root.title("NodeSolver")
+        self.root.title("CircuitSolver")
 
         self.is_creating_connection = False
         self.connecting_socket = None
