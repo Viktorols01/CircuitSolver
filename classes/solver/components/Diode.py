@@ -24,5 +24,5 @@ class Diode:
         return self.current
 
     # u_in, u_out, i
-    def function(self):
-        return lambda x: self.Is * (np.exp((x[0] - x[1]) / self.V_thermal) - 1) - x[2]
+    def get_function(self, u_out_name, u_in_name, i_name):
+        return lambda x: self.Is * (np.exp((x[u_out_name] - x[u_in_name]) / self.V_thermal) - 1) - x[i_name]

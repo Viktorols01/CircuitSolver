@@ -18,5 +18,5 @@ class Source:
         return self.current
 
     # # u_in, u_out, i
-    def function(self):
-        return lambda x: x[0] + self.Vs - x[1]
+    def get_function(self, u_out_name, u_in_name, i_name):
+        return lambda x: x[u_out_name] + self.Vs - x[u_in_name]

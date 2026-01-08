@@ -16,5 +16,5 @@ class Component(ABC):
     def set_current(self, current):
         self.current = current
 
-    def function(self, u_out, u_in, i):
+    def get_function(self, u_out_name, u_in_name, i_name):
         pass

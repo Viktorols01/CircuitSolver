@@ -5,7 +5,7 @@ from classes.solver.components.Source import Source
 
 class GUISource(GUIDraggable):
     def __init__(self, x, y):
-        self.math_component = Source(10)
+        self.math_component = Source(5)
 
         socket1 = GUISocket(self, lambda: (self.x + self.w / 2, self.y + self.h), 1)
         socket2 = GUISocket(self, lambda: (self.x + self.w / 2, self.y), 1)

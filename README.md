@@ -1,3 +1,9 @@
+# NodeSolver
+## Overview
+Calculate the current and voltage over components. 
+Uses a numerical method that allows solving with non-linear components such as diodes.
+
+## Matematik på svenska
 Koncept:
     Varje nod bidrar med en ekvation och en variabel:
     + ekvation: kirchoffs lag
@@ -12,11 +18,11 @@ Koncept:
 
 Hur:
     För att lösa ett olinjärt ekvationsystem gör vi om ekvationer till funktioner 
-    som ska vara 0. Sedan löser vi med JFNKsolver.
+    som ska vara 0. Sedan löser vi med JFNKsolver (Jacobian Free Newton-Krylov).
 
     För att gå från nätverk till ekvationsystem använder vi klassen Network.
 
 GUI:
-Skapa draggables. Noder är också dragables. Dessa har alla sockets, som kopplas ihop. 
+Skapa draggables. Noder är också draggables. Dessa har alla sockets, som kopplas ihop. 
 För att kunna skapa ekvationer måste det finnas tvåpoler med passerande ström mellan 
 alla noder. Därför introducerar vi SilentNode, som är hur mycket ström som passerar mellan två noder.

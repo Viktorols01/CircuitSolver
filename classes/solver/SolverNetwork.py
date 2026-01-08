@@ -1,53 +1,62 @@
-from classes.solver.JFNKsolver import JFNKsolver
+from JFNKsolver.interface.SystemOfEquations import SystemOfEquations
+from JFNKsolver.interface.Equation import Equation
+from JFNKsolver.JFNKsolver import JFNKsolver
 
 
 class SolverNetwork:
-    def __init__(self, complex=False):
-        self.complex = complex
+    def __init__(self, use_complex=False):
+        self.use_complex = use_complex
 
-        self.nodes = []
-        self.node_names = []
+        self.node_map = {}
         self.node_count = 0
-        self.components = []
-        self.component_names = []
+        self.component_map = {}
         self.component_count = 0
 
     def add_node(self, node):
-        self.nodes.append(node)
-        self.node_names.append(f"node {self.node_count}")
+        name = f"n{self.node_count}"
+        self.node_map[name] = node
+        # ducktyping comes in handy but this is a crime
+        node.name = name
         self.node_count += 1
 
     def add_component(self, component):
-        self.components.append(component)
-        self.component_names.append(f"component {self.component_count}")
+        name = f"c{self.component_count}"
+        self.component_map[name] = component
+        # ducktyping comes in handy but this is a crime
+        component.name = name
         self.component_count += 1
 
-    def solve(self, verbose=False, initial_value=1, ndigits=2):
-        if self.complex:
-            solver = JFNKsolver(initial_value=initial_value, dtype=complex)
+    def solve(self, verbose=False, initial_guess=1, ndigits=2):
+        system_of_equations = SystemOfEquations()
+        self.__add_node_equations(system_of_equations)
+        self.__add_component_equations(system_of_equations)
+        system_of_equations.assert_is_balanced()
+
+        if self.use_complex:
+            dtype=complex
         else:
-            solver = JFNKsolver(initial_value=initial_value, dtype=float)
-        self.__add_node_equations(solver)
-        self.__add_component_equations(solver)
-        solver.solve(verbose=verbose, ndigits=ndigits)
+            dtype=float
+        solver = JFNKsolver(system_of_equations, initial_guess=initial_guess, dtype=dtype)
 
-        variable_map = solver.get_variable_map()
-        for variable_name in variable_map:
-            variable_value = variable_map[variable_name]
-
-            type = variable_name.split(" ")[0]
-            if type == "node":
-                index = self.node_names.index(variable_name)
-                self.nodes[index].set_potential(variable_value)
+        variable_map = solver.solve(verbose=verbose, ndigits=ndigits)
+        for name, value in variable_map.items():
+            if name in self.node_map:
+                self.node_map[name].set_potential(value)
             else:
-                index = self.component_names.index(variable_name)
-                self.components[index].set_current(variable_value)
+                self.component_map[name].set_current(value)
 
-    def __add_node_equations(self, solver):
-        solver.add_equation(1, [self.node_names[0]], lambda x: x[0])
+    def __add_node_equations(self, system_of_equations):
 
-        for i in range(1, self.node_count):
-            node = self.nodes[i]
+        grounded = False
+        for node_name, node in self.node_map.items():
+            print(node_name)
+            # ground first node
+            if not grounded:
+                equation = Equation([node_name], lambda x: x[node_name] - 0)
+                system_of_equations.add_equation(equation)
+                grounded = True
+                continue
+
             connections = node.get_connections()
             n = len(connections)
             sign_list = []
@@ -61,31 +70,28 @@ class SolverNetwork:
                 else:
                     raise Exception("socket is not 'in' or 'our'")
 
-                index = self.components.index(component)
-                name_list.append(self.component_names[index])
+                name_list.append(component.name)
 
-            # viktigt: early binding!
-            def function(x, sign_list_, n_):
+            def function(x, name_list_, sign_list_, n_):
                 sum = 0
                 for j in range(n_):
-                    sum += sign_list_[j] * x[j]
+                    name = name_list_[j]
+                    sum += sign_list_[j] * x[name]
                 return sum
 
-            solver.add_equation(
-                n, name_list, lambda x, s=sign_list, t=n: function(x, s, t)
-            )
+            # kirchoffs first law
+            # viktigt: early binding!
+            equation = Equation(name_list, lambda x, nl=name_list, s=sign_list, t=n: function(x, nl, s, t))
+            print("b")
+            system_of_equations.add_equation(equation)
 
-    def __add_component_equations(self, solver):
-        for i in range(self.component_count):
-            component = self.components[i]
-            name = self.component_names[i]
-
+    def __add_component_equations(self, system_of_equations):
+        for name, component in self.component_map.items():
             node_in = component.get_sockets()["in"]
-            index_in = self.nodes.index(node_in)
-            name_in = self.node_names[index_in]
+            name_in = node_in.name
 
             node_out = component.get_sockets()["out"]
-            index_out = self.nodes.index(node_out)
-            name_out = self.node_names[index_out]
+            name_out = node_out.name
 
-            solver.add_equation(3, [name_in, name_out, name], component.function())
+            equation = Equation([name_in, name_out, name], component.get_function(name_in, name_out, name))
+            system_of_equations.add_equation(equation)

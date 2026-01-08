@@ -42,7 +42,7 @@ def solve(window):
     for component in components:
         network.add_component(component)
 
-    network.solve(verbose=False, initial_value=1, ndigits=2)
+    network.solve(verbose=True, initial_guess=1, ndigits=2)
 
 
 window = Window(800, 800, lambda window: solve(window))
