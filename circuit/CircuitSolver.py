@@ -38,18 +38,16 @@ class CircuitSolver:
             dtype=float
         solver = JFNKsolver(system_of_equations, initial_guess=initial_guess, dtype=dtype)
 
-        variable_map = solver.solve(verbose=verbose, ndigits=ndigits)
+        variable_map = solver.solve(verbose=verbose, rtol=0.01, atol=0, ndigits=ndigits)
         for name, value in variable_map.items():
             if name in self.node_map:
-                self.node_map[name].set_potential(value)
+                self.node_map[name].potential = value
             else:
-                self.component_map[name].set_current(value)
+                self.component_map[name].current = value
 
     def __add_node_equations(self, system_of_equations):
-
         grounded = False
         for node_name, node in self.node_map.items():
-            print(node_name)
             # ground first node
             if not grounded:
                 equation = Equation([node_name], lambda x: x[node_name] - 0)
@@ -57,41 +55,31 @@ class CircuitSolver:
                 grounded = True
                 continue
 
-            connections = node.get_connections()
-            n = len(connections)
             sign_list = []
             name_list = []
-            for pair in connections:
-                component, socket = pair
-                if socket == "in":
-                    sign_list.append(-1)
-                elif socket == "out":
-                    sign_list.append(1)
-                else:
-                    raise Exception("socket is not 'in' or 'our'")
+            for component_in in node.components_in:
+                sign_list.append(-1)
+                name_list.append(component_in.name)
 
-                name_list.append(component.name)
+            for component_out in node.components_out:
+                sign_list.append(1)
+                name_list.append(component_out.name)
 
-            def function(x, name_list_, sign_list_, n_):
+            # kirchoffs first law
+            # important: early binding!
+            def kirchoff_residual(x, name_list_, sign_list_):
                 sum = 0
-                for j in range(n_):
+                for j in range(len(name_list_)):
                     name = name_list_[j]
                     sum += sign_list_[j] * x[name]
                 return sum
 
-            # kirchoffs first law
-            # viktigt: early binding!
-            equation = Equation(name_list, lambda x, nl=name_list, s=sign_list, t=n: function(x, nl, s, t))
-            print("b")
+            equation = Equation(name_list, lambda x, nl=name_list, sl=sign_list: kirchoff_residual(x, nl, sl))
             system_of_equations.add_equation(equation)
 
     def __add_component_equations(self, system_of_equations):
         for name, component in self.component_map.items():
-            node_in = component.get_sockets()["in"]
-            name_in = node_in.name
-
-            node_out = component.get_sockets()["out"]
-            name_out = node_out.name
-
-            equation = Equation([name_in, name_out, name], component.get_function(name_in, name_out, name))
+            name_out = component.node_out.name
+            name_in = component.node_in.name
+            equation = Equation([name_out, name_in, name], component.get_function(name_out, name_in, name))
             system_of_equations.add_equation(equation)
