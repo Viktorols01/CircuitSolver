@@ -38,7 +38,7 @@ class CircuitSolver:
             dtype=float
         solver = JFNKsolver(system_of_equations, initial_guess=initial_guess, dtype=dtype)
 
-        variable_map = solver.solve(verbose=verbose, rtol=0.01, atol=0, ndigits=ndigits)
+        variable_map = solver.solve(verbose=verbose, ndigits=ndigits)
         for name, value in variable_map.items():
             if name in self.node_map:
                 self.node_map[name].potential = value

@@ -1,9 +1,9 @@
-from gui.abstract.GUIDraggable import GUIDraggable
+from gui.abstract.GUIDraggable import GUIRect
 from gui.sub.GUISocket import GUISocket
 from circuit.components.Source import Source
 
 
-class GUISource(GUIDraggable):
+class GUISource(GUIRect):
     def __init__(self, x, y):
         self.math_component = Source(5)
 
@@ -12,7 +12,7 @@ class GUISource(GUIDraggable):
         super().__init__(x, y, 20, 100, [socket1, socket2])
 
     def render(self, canvas):
-        self.render_base(canvas)
+        self.render_hitbox(canvas)
         canvas.create_rectangle(
             self.x,
             self.y,

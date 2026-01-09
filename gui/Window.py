@@ -141,7 +141,7 @@ class Window:
 
         for draggable in self.draggables:
             if draggable.is_dragged:
-                draggable.move(
+                draggable.move_to(
                     event.x - self.held_offset_x, event.y - self.held_offset_y
                 )
                 return
