@@ -1,11 +1,12 @@
 import numpy as np
-from circuit.components.Component import Component
+from circuit.Twopole import Twopole
 
 # The diode has problems when solving with high numbers (makes sense).
 # If this is to be used, it seems important to use sources with
 # low voltages.
-class Diode(Component):
+class Diode(Twopole):
     def __init__(self, Is=0.01):
+        super().__init__()
         self.Is = Is
         # Thermal voltage
         self.V_thermal = 25.9 * 10**-3

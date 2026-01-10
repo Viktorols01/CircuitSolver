@@ -30,9 +30,9 @@ network = CircuitSolver()
 network.add_node(node1)
 network.add_node(node2)
 network.add_node(node3)
-network.add_component(resistance)
-network.add_component(source)
-network.add_component(diode)
+network.add_twopole(resistance)
+network.add_twopole(source)
+network.add_twopole(diode)
 network.solve(initial_guess=1, ndigits=2)
 
 # Solved results:

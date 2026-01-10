@@ -1,12 +1,4 @@
-+ GUI
-
 + Eisenstat-Walker method
 + Preconditioning???
 
-+ solver components should use inheritance
-+ gui components should use inheritance
-
-+ Further complex numbers, generalize 
-
 + Better GUI
-+ Allow connecting components to eachother (auto-create nodes)

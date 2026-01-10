@@ -1,7 +1,8 @@
-from circuit.components.Component import Component
+from circuit.Twopole import Twopole
 
-class Resistance(Component):
+class Resistance(Twopole):
     def __init__(self, R):
+        super().__init__()
         self.R = R
 
     def get_function(self, potential_out_name, potential_in_name, current_name):

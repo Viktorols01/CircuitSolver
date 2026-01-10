@@ -9,8 +9,8 @@ class CircuitSolver:
 
         self.node_map = {}
         self.node_count = 0
-        self.component_map = {}
-        self.component_count = 0
+        self.twopole_map = {}
+        self.twopole_count = 0
 
     def add_node(self, node):
         name = f"n{self.node_count}"
@@ -19,17 +19,17 @@ class CircuitSolver:
         node.name = name
         self.node_count += 1
 
-    def add_component(self, component):
-        name = f"c{self.component_count}"
-        self.component_map[name] = component
+    def add_twopole(self, twopole):
+        name = f"d{self.twopole_count}"
+        self.twopole_map[name] = twopole
         # ducktyping comes in handy but this is a crime
-        component.name = name
-        self.component_count += 1
+        twopole.name = name
+        self.twopole_count += 1
 
     def solve(self, verbose=False, initial_guess=1, ndigits=2):
         system_of_equations = SystemOfEquations()
         self.__add_node_equations(system_of_equations)
-        self.__add_component_equations(system_of_equations)
+        self.__add_twopole_equations(system_of_equations)
         system_of_equations.assert_is_balanced()
 
         if self.use_complex:
@@ -43,7 +43,7 @@ class CircuitSolver:
             if name in self.node_map:
                 self.node_map[name].potential = value
             else:
-                self.component_map[name].current = value
+                self.twopole_map[name].current = value
 
     def __add_node_equations(self, system_of_equations):
         grounded = False
@@ -57,13 +57,13 @@ class CircuitSolver:
 
             sign_list = []
             name_list = []
-            for component_in in node.components_in:
+            for twopole_in in node.twopoles_in:
                 sign_list.append(-1)
-                name_list.append(component_in.name)
+                name_list.append(twopole_in.name)
 
-            for component_out in node.components_out:
+            for twopole_out in node.twopoles_out:
                 sign_list.append(1)
-                name_list.append(component_out.name)
+                name_list.append(twopole_out.name)
 
             # kirchoffs first law
             # important: early binding!
@@ -77,9 +77,9 @@ class CircuitSolver:
             equation = Equation(name_list, lambda x, nl=name_list, sl=sign_list: kirchoff_residual(x, nl, sl))
             system_of_equations.add_equation(equation)
 
-    def __add_component_equations(self, system_of_equations):
-        for name, component in self.component_map.items():
-            name_out = component.node_out.name
-            name_in = component.node_in.name
-            equation = Equation([name_out, name_in, name], component.get_function(name_out, name_in, name))
+    def __add_twopole_equations(self, system_of_equations):
+        for name, twopole in self.twopole_map.items():
+            name_out = twopole.node_out.name
+            name_in = twopole.node_in.name
+            equation = Equation([name_out, name_in, name], twopole.get_function(name_out, name_in, name))
             system_of_equations.add_equation(equation)

@@ -29,8 +29,8 @@ node2.connect_in(impedance1)
 network = CircuitSolver(use_complex=True)
 network.add_node(node1)
 network.add_node(node2)
-network.add_component(impedance1)
-network.add_component(source)
+network.add_twopole(impedance1)
+network.add_twopole(source)
 network.solve(initial_guess=1, ndigits=5)
 
 # Solved results:

@@ -1,9 +1,9 @@
-from circuit.nodes.Node import Node
+from circuit.Node import Node
 from circuit.CircuitSolver import CircuitSolver
 
-from circuit.components.Resistance import Resistance
-from circuit.components.Source import Source
-from circuit.components.Diode import Diode
+from circuit.twopoles.Resistance import Resistance
+from circuit.twopoles.Source import Source
+from circuit.twopoles.Diode import Diode
 
 # Create nodes
 node1 = Node()
@@ -25,8 +25,8 @@ node2.connect_out(source)
 network = CircuitSolver()
 network.add_node(node1)
 network.add_node(node2)
-network.add_component(resistance)
-network.add_component(source)
+network.add_twopole(resistance)
+network.add_twopole(source)
 network.solve(initial_guess=1, ndigits=2)
 
 # Solved results:

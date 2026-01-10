@@ -9,7 +9,7 @@ Varje nod bidrar med en ekvation och en variabel:
     + ekvation: kirchoffs lag
     + variabel: potential i nod
 
-Varje komponent bidrar med en ekvation och en variabel
+Varje dipol bidrar med en ekvation och en variabel
 
     + ekvation: förhållande mellan kopplade potentialer och passerande ström
     + variabel: genomgående ström

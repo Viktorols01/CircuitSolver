@@ -1,12 +1,13 @@
-# alltid rektangulära hitboxes nu
-class GUIRect:
+from gui.model.area.Area import Area
+
+class RectArea(Area):
     def __init__(self, x, y, w, h):
         self.x = x
         self.y = y
         self.w = w
         self.h = h
 
-    def render_hitbox(self, canvas):
+    def render(self, canvas):
         canvas.create_rectangle(
             self.x,
             self.y,
@@ -16,7 +17,7 @@ class GUIRect:
             width=1,
         )
 
-    def touched(self, x, y):
+    def is_touched(self, x, y):
         if x > self.x and x < self.x + self.w:
             if y > self.y and y < self.y + self.h:
                 return True

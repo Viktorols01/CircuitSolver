@@ -1,7 +1,8 @@
-from circuit.components.Component import Component
+from circuit.Twopole import Twopole
 
-class Source(Component):
+class Source(Twopole):
     def __init__(self, Vs):
+        super().__init__()
         self.Vs = Vs
 
     def get_function(self, potential_out_name, potential_in_name, current_name):

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-class Component(ABC):
+class Twopole(ABC):
     def __init__(self):
         self.current = 0
         self.node_in = None
