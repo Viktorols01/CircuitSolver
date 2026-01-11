@@ -40,7 +40,7 @@ class GNode:
             ((socket.area.x - self.area.x) ** 2 + (socket.area.y - self.area.y) ** 2) ** 0.5 / 10
         )
         for i in range(electron_count):
-            speed_factor = 1/20
+            speed_factor = 1/8
             x, y = interpolate(
                 (socket.area.x, socket.area.y),
                 (self.area.x, self.area.y),

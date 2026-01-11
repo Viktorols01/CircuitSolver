@@ -1,7 +1,9 @@
-# NodeSolver
+# CircuitSolver
 ## Overview
 Calculate the current and voltage over components. 
 Uses a numerical method that allows solving with non-linear components such as diodes.
+
+Uses [tkinter](https://docs.python.org/3/library/tkinter.html) for the interface.
 
 ## Matematik på svenska
 Varje nod bidrar med en ekvation och en variabel:
