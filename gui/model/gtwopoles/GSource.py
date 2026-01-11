@@ -20,7 +20,7 @@ class GSource(GTwopole):
         return GTwopoleSocket(self, True, lambda: (self.area.x + self.w / 2, self.area.y))
 
     def _create_twopole(self):
-        return Source(5)
+        return Source(0.1)
 
     def render(self, canvas):
         canvas.create_rectangle(
@@ -32,5 +32,5 @@ class GSource(GTwopole):
             outline="black",
             width=2,
         )
-        canvas.create_text((self.area.x + self.area.w / 2, self.area.y + 10), text="+")
-        canvas.create_text((self.area.x + self.area.w / 2, self.area.y + self.area.h - 10), text="-")
+        canvas.create_text((self.area.x + self.area.w / 2, self.area.y + 10), text="-")
+        canvas.create_text((self.area.x + self.area.w / 2, self.area.y + self.area.h - 10), text="+")

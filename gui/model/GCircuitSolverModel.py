@@ -15,7 +15,8 @@ class GCircuitSolverModel:
         self.dragged_offset_x = 0
         self.dragged_offset_y = 0
         self.dragged_area = None
-        self.dragged_twopole = None
+        self.dragged_gtwopole = None
+        self.dragged_gnode = None
 
         self.connecting_gtwopole_socket = None
         self.connecting_gnode = None
@@ -71,7 +72,7 @@ class GCircuitSolverModel:
             gnode.add_socket_out(gtwopole_socket)
         else:
             gnode.add_socket_in(gtwopole_socket)
-            
+        gtwopole_socket.is_connected = True
 
     def _connect_gnode(self, gnode):
         def create_gcopper(gnode, other_gnode):
@@ -82,12 +83,12 @@ class GCircuitSolverModel:
             
         touched_gtwopole_socket_out = self._get_touched_gtwopole_socket_out()
         if touched_gtwopole_socket_out:
-            gnode.gtwopole_sockets_out.append(touched_gtwopole_socket_out)
+            self._connect_gnode_to_socket(gnode, touched_gtwopole_socket_out)
             return
 
         touched_gtwopole_socket_in = self._get_touched_gtwopole_socket_in()
         if touched_gtwopole_socket_in:
-            gnode.gtwopole_sockets_in.append(touched_gtwopole_socket_in)
+            self._connect_gnode_to_socket(gnode, touched_gtwopole_socket_in)
             return
 
         touched_gnode = self._get_touched_gnode()
@@ -101,7 +102,7 @@ class GCircuitSolverModel:
 
     def _connect_gtwopole_socket(self, gtwopole_socket):
         def create_connecting_gnode(gtwopole_socket, other_gtwopole_socket):
-            gnode = GNode(self.x, self.y)
+            gnode = GNode((self.x + self.dragged_x)/2, (self.y + self.dragged_y)/2)
             self._connect_gnode_to_socket(gnode, gtwopole_socket)
             self._connect_gnode_to_socket(gnode, other_gtwopole_socket)
             self.gnodes.append(gnode)
@@ -134,7 +135,7 @@ class GCircuitSolverModel:
                 self.dragged_offset_x = self.x - area.x
                 self.dragged_offset_y = self.y - area.y
                 self.dragged_area = area
-                self.dragged_twopole = gtwopole
+                self.dragged_gtwopole = gtwopole
                 return
         for gnode in self.gnodes:
             area = gnode.area
@@ -144,18 +145,21 @@ class GCircuitSolverModel:
                 self.dragged_offset_x = self.x - area.x
                 self.dragged_offset_y = self.y - area.y
                 self.dragged_area = area
+                self.dragged_gnode = gnode
                 return
 
     def move_dragged_area(self):
-        # borde också uppdatera sockets på något jävla sätt
         if self.dragged_area:
             self.dragged_area.move_to(self.x - self.dragged_offset_x, self.y - self.dragged_offset_y)
-        if self.dragged_twopole:
-            self.dragged_twopole.update_socket_positions()
+        if self.dragged_gtwopole:
+            self.dragged_gtwopole.update_socket_positions()
+        if self.dragged_gnode:
+            self.dragged_gnode.update_copper_positions()
     
     def release_dragged_area(self):
         self.dragged_area = None
-        self.dragged_twopole = None
+        self.dragged_gtwopole = None
+        self.dragged_gnode = None
     
     def update_position(self, x, y):
         self.x = x

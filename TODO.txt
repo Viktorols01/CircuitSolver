@@ -2,3 +2,4 @@
 + Preconditioning???
 
 + Better GUI
++ Removal of nodes/twopoles

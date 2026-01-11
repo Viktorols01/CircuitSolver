@@ -20,7 +20,7 @@ class GResistance(GTwopole):
         return GTwopoleSocket(self, True, lambda: (self.area.x + self.w, self.area.y + self.h / 2))
 
     def _create_twopole(self):
-        return Resistance(5)
+        return Resistance(1)
 
     def render(self, canvas):
         #self.area.render(canvas)

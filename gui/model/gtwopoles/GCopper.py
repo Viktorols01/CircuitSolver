@@ -6,8 +6,8 @@ from gui.Utility import interpolate
 
 # bridge between two nodes
 class GCopper(GTwopole):
-    def __init__(self, area_1, area_2):
-        self.position_function = lambda: interpolate((area_1.x, area_1.y), (area_2.x, area_2.y), 1 / 2)
+    def __init__(self, area1, area2):
+        self.position_function = lambda: interpolate((area1.x, area1.y), (area2.x, area2.y), 1 / 2)
         super().__init__(0, 0)
 
     def _create_area(self, x, y):
@@ -23,6 +23,9 @@ class GCopper(GTwopole):
         return Source(0)
 
     def render(self, canvas):
+        pass
+
+    def update_position(self): 
         x, y = self.position_function()
         self.area.move_to(x, y)
-        pass
+        self.update_socket_positions()

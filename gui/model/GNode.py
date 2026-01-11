@@ -1,5 +1,6 @@
 from gui.Utility import interpolate
 from gui.model.area.CircleArea import CircleArea
+from gui.model.gtwopoles.GCopper import GCopper
 from circuit.Node import Node
 
 # this code must be written for both nodes and components as both have sockets
@@ -39,14 +40,21 @@ class GNode:
             ((socket.area.x - self.area.x) ** 2 + (socket.area.y - self.area.y) ** 2) ** 0.5 / 10
         )
         for i in range(electron_count):
+            speed_factor = 1/20
             x, y = interpolate(
                 (socket.area.x, socket.area.y),
                 (self.area.x, self.area.y),
                 (
-                    (i + (self.render_frame / 60) * current * direction)
+                    (i + (self.render_frame * speed_factor) * current * direction)
                     % electron_count
                 )
                 / electron_count,
             )
             canvas.create_oval(x - 1, y - 1, x + 1, y + 1, fill="#fff", outline="#fff")
         self.render_frame += 1
+    
+    def update_copper_positions(self):
+        for socket in self.gtwopole_sockets_in + self.gtwopole_sockets_out:
+            parent = socket.parent
+            if isinstance(parent, GCopper):
+                parent.update_position()

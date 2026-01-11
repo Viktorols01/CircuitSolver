@@ -56,26 +56,26 @@ class CircuitSolverWindow:
     def __clicked_left(self, event):
         self.circuit_solver_model.update_position(event.x, event.y)
         self.circuit_solver_model.update_dragged_position(event.x, event.y)
-        self.circuit_solver_model.handle_start_connecting()
+        self.circuit_solver_model.pickup_dragged_area()
 
     def __moved_left(self, event):
         self.circuit_solver_model.update_position(event.x, event.y)
+        self.circuit_solver_model.move_dragged_area()
 
     def __released_left(self, event):
-        self.circuit_solver_model.handle_stop_connecting()
+        self.circuit_solver_model.release_dragged_area()
         
     def __clicked_right(self, event):
         self.circuit_solver_model.update_position(event.x, event.y)
         self.circuit_solver_model.update_dragged_position(event.x, event.y)
-        self.circuit_solver_model.pickup_dragged_area()
+        self.circuit_solver_model.handle_start_connecting()
 
     def __moved_right(self, event):
         self.circuit_solver_model.update_position(event.x, event.y)
-        self.circuit_solver_model.move_dragged_area()
 
     def __released_right(self, event):
         self.circuit_solver_model.update_position(event.x, event.y)
-        self.circuit_solver_model.release_dragged_area()
+        self.circuit_solver_model.handle_stop_connecting()
 
     def render(self):
         self.canvas.delete("all")

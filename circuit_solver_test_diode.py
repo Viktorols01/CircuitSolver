@@ -1,9 +1,9 @@
-from circuit.nodes.Node import Node
+from circuit.Node import Node
 from circuit.CircuitSolver import CircuitSolver
 
-from circuit.components.Resistance import Resistance
-from circuit.components.Source import Source
-from circuit.components.Diode import Diode
+from circuit.twopoles.Resistance import Resistance
+from circuit.twopoles.Source import Source
+from circuit.twopoles.Diode import Diode
 
 # Create nodes
 node1 = Node()
