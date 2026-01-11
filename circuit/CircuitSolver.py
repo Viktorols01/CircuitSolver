@@ -29,7 +29,9 @@ class CircuitSolver:
     def solve(self, verbose=False, initial_guess=1, ndigits=2):
         system_of_equations = SystemOfEquations()
         self.__add_node_equations(system_of_equations)
-        self.__add_twopole_equations(system_of_equations)
+        success = self.__add_twopole_equations(system_of_equations)
+        if not success:
+            return False
         system_of_equations.assert_is_balanced()
 
         if self.use_complex:
@@ -38,12 +40,16 @@ class CircuitSolver:
             dtype=float
         solver = JFNKsolver(system_of_equations, initial_guess=initial_guess, dtype=dtype)
 
+        if solver is None:
+            return False
+
         variable_map = solver.solve(verbose=verbose, ndigits=ndigits)
         for name, value in variable_map.items():
             if name in self.node_map:
                 self.node_map[name].potential = value
             else:
                 self.twopole_map[name].current = value
+        return True
 
     def __add_node_equations(self, system_of_equations):
         grounded = False
@@ -79,7 +85,10 @@ class CircuitSolver:
 
     def __add_twopole_equations(self, system_of_equations):
         for name, twopole in self.twopole_map.items():
+            if not twopole.node_in or not twopole.node_out:
+                return False
             name_out = twopole.node_out.name
             name_in = twopole.node_in.name
             equation = Equation([name_out, name_in, name], twopole.get_function(name_out, name_in, name))
             system_of_equations.add_equation(equation)
+        return True

@@ -41,6 +41,10 @@ class JFNKsolver:
             print("Initial norm:", res_init)
             print("Final norm", np.linalg.norm(res))
 
+        has_nan_or_inf = not np.isfinite(res).all()
+        if has_nan_or_inf:
+            return None
+
         return iterate.get_value_map_from_vector()
 
 

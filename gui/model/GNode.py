@@ -7,7 +7,7 @@ from circuit.Node import Node
 # (nodes have many, components have in and out)
 class GNode:
     def __init__(self, x, y):
-        self.area = CircleArea(x, y, 7)
+        self.area = CircleArea(x, y, 10)
         self.gtwopole_sockets_in = []
         self.gtwopole_sockets_out = []
         self.node = Node()

@@ -196,7 +196,8 @@ class GCircuitSolverModel:
                 gnode.node.connect_out(twopole)
             network.add_node(gnode.node)
                 
-        network.solve(verbose=True, initial_guess=1, ndigits=2)
+        success = network.solve(verbose=True, initial_guess=1, ndigits=2)
+        return success
 
     def _get_touched_gtwopole_socket_out(self):
         for gtwopole in self.gtwopoles:
